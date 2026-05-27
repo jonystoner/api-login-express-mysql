@@ -10,9 +10,9 @@ require("dotenv").config();
 const conexao = mysql.createPool({
     host: process.env.db_host,
     user: process.env.db_user,
-    password: process.env.db.password,
+    password: process.env.db_password,
     database: process.env.db_name
 });
 
 // exportando a conexão com o banco de dados 
-module_exports = conexao;
+module.exports = conexao;
