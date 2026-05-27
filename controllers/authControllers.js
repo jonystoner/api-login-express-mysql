@@ -12,11 +12,11 @@ async function cadastrarUsuario(req, res) {
                   <h1> erro no cadastro </h1>
                   <p> Prenche todos os campos </p> 
                   <a href="/cadastro.html"> voltar </a> 
-                    `);
+                    `)
         }
         // verifica se ja existe um usuario com o mesmo e-mail 
         const [usuarioExistente] = await conexao.query(
-            'select * from usuarios where email = ? ',
+            'select * from usuario where email = ? ',
             [email]
         );
         if (usuarioExistente.length > 0) {
@@ -24,11 +24,13 @@ async function cadastrarUsuario(req, res) {
         }
         // cadastrando o usuário no banco de dados 
         await conexao.query(
-            "insert into usuarios(nome,email,senha) values (?,?,?)",
-            [nome, email, senha]
+            "insert into usuario (nome,email,senha) values (?,?,?)",
+            [nome, email, senha],
+
         );
         // redirecionando para o lifin com mensagem de cadastro efetuado com sucesso 
-        res.redirect("/login.html?cadastro=sucesso")
+        
+        res.redirect("/login.html?cadastro=sucesso");
     }
     catch (erro) {
         console.log("erro ao cadastar usuário", erro);
@@ -43,7 +45,7 @@ async function realizarLogin(req, res) {
         const { email, senha } = req.body;
 
         const [usuarios] = await conexao.query(
-            "select * from usuarios where email = ? and senha = ?",
+            "select * from usuario where email = ? and senha = ?",
             [email, senha]
         )
         if (usuarios.length === 0) {
@@ -87,7 +89,7 @@ function exibirSucesso(req, res) {
 }
 
 module.exports = {
-   cadastrarUsuario,
-   realizarLogin,
-   exibirSucesso
+    cadastrarUsuario,
+    realizarLogin,
+    exibirSucesso
 }

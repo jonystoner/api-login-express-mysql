@@ -1,52 +1,52 @@
-const express = require("express")
+const express = require('express');
+const path = require('path')
 
-//importa o modulo path para trabalhar com caminhos de arquivops 
-const path = require("path")
+require("dotenv").config();
 
-//carrega as variaveis de ambinete do arquivo .env 
-require("dotenv").config()
-
-const conexao = require("./config/database.js")
-
-// importando as funçõs do conttroller
 const {
-  cadastrarUsuario,
-  realizarLogin,
-  exibirSucesso,
-} = require("./controllers/authcontrollers.js");
-
-
+    cadastrarUsuario,
+    realizarLogin,
+    exibirSucesso,
+} = require("./controllers/authControllers");
 
 const app = express();
 
+const conexao = require("./config/database")
+
+
 conexao.getConnection()
-.then(() => {
-    console.log("banco de dados conextado com sucesso");
+.then (() =>{
+    console.log("Banco de dados encontrado com suceso");
 })
+
 .catch((erro) => {
-    console.log("Erro ao conectar com o banco de dados", erro)
-})
+    console.log("Erro ao conectar no banco de dados:", erro);
+});
 
-const port = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({
-    extended:true
-}))
+//Middleware para ler dados enviados de formularios HTML
+app.use(express.urlencoded({extended:true})) 
 
+//Middleware para ler dados de JASON 
 app.use(express.json())
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname,"public")));
 
-app.get("/", (req,res) => {
+
+
+app.get("/", (req, res) =>{
     res.redirect("/login.html")
 })
 
-app.post("/cadastro", cadastrarUsuario)
+
+app.post("/cadastro", cadastrarUsuario);
 
 app.post("/login", realizarLogin)
 
 app.get("/sucesso", exibirSucesso)
 
-app.listen (port, () =>{
-    console.log(`servidor rodando em localhost:${port}`)
+
+app.listen(PORT, () =>{
+    console.log(`Servidor rodando em http://localhost:${PORT}`)
 })
